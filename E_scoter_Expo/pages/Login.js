@@ -13,10 +13,12 @@ import {
 import { useState } from "react";
 import Checkbox from "expo-checkbox";
 import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [arg, setArg] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -25,8 +27,7 @@ const [erroe,setError]=useState("")
     setLoading(true);
     axios({
       method: "post",
-      url: "http://192.168.9.46:6060/auth/login",
-      // url:"127.0.0.1:6060/auth/login",
+      url: "http://192.168.9.46:9000/auth/login",
       data: {
         email: email,
         password: password,
@@ -39,7 +40,10 @@ const [erroe,setError]=useState("")
       .then((res) => {
         setLoading(false);
         console.log(res.data);
-        navigation.navigate("Meteo");
+        // create session 
+      
+
+        navigation.navigate("Home");
       }
       )
       .catch((err) => {
@@ -48,12 +52,12 @@ const [erroe,setError]=useState("")
         setError(err.response.data.message)
       }
       );
+// Stockage des données de session
+AsyncStorage.setItem('token', res.data.token);
 
   };
   return (
     <View style={[styles.container]}>
-      {/* <ImageBackground source={require("../assets/image1.jpg")}  style={{ width: "100%", height: "100%" }}> */}
-
       <Text style={styles.Header}>Login</Text>
       <Text style={styles.description}>description</Text>
 
@@ -88,7 +92,6 @@ const [erroe,setError]=useState("")
         />
         <Text style={styles.wrapperText}>Remember me</Text>
       </View>
-      {/* :navigatio Home */}
 
       <TouchableOpacity
         style={[
@@ -100,7 +103,6 @@ const [erroe,setError]=useState("")
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 7,
     borderRadius: 1,
-    fontFamily: "regular",
+    // fontFamily: "regular",
     fontSize: 18,
   },
 });

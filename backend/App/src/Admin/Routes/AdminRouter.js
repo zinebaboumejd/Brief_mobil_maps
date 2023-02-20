@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const {getUser
-}=require("../controller/Repascontroller")
-const {protect,role}=require('../../../middlewares/authMiddlewre')
+const { getScoter, createScoter
+} = require("../controller/Datacontroller")
+const { protect, role } = require('../../../middlewares/authMiddlewre')
 
-router.route("/getUser").get(protect,role("admin"),getUser);
+router.route("/getScoter").get( getScoter);
+router.route("/createScoter").post(protect, role("admin"), createScoter);
 
 module.exports = router;
